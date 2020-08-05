@@ -43,8 +43,13 @@ public class SharedCamera : MonoBehaviour
         //zooms the camera
         print(GetGreatestDistance());
 
-        var zoom = (GetGreatestDistance() / 2);
+        var tan = Mathf.Tan(cam.fieldOfView / 2);
+
+        var zoom = ((GetGreatestDistance() / 2) / tan) * zoomOffset;
+
         transform.position += Vector3.forward * Mathf.Lerp(minZoom, maxZoom, zoom);
+
+        print(transform.position.z);
 
         //float newZoom = Mathf.Lerp(maxZoom, minZoom, GetGreatestDistance() / zoomAdjustment);
         //cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, newZoom, Time.deltaTime);
