@@ -22,6 +22,9 @@ public class SharedCamera : MonoBehaviour
     public float zoomOffset;
     public float minZoom;
     public float maxZoom;
+    public float zoom;
+    public float zoomSpeed = 1;
+    Vector3 center;
 
     [Header("Unity Things")]
     private Camera cam;
@@ -38,16 +41,18 @@ public class SharedCamera : MonoBehaviour
         
         //moves the camera
         Vector3 centerpoint = GetCenterPoint();
-        transform.position = Vector3.SmoothDamp(transform.position, centerpoint + defultPos, ref velocity, smoothTime);
+        center = Vector3.SmoothDamp(center, centerpoint + defultPos, ref velocity, smoothTime);
+        transform.position = center;
 
         //zooms the camera
         print(GetGreatestDistance());
 
         var tan = Mathf.Tan(cam.fieldOfView / 2);
 
-        var zoom = ((GetGreatestDistance() / 2) / tan) * zoomOffset;
+        var idealZoom = ((GetGreatestDistance() / 2) / tan) * zoomOffset;
 
-        transform.position += Vector3.forward * Mathf.Lerp(minZoom, maxZoom, zoom);
+        zoom = Mathf.MoveTowards(zoom, idealZoom, Time.deltaTime * zoomSpeed);
+        transform.position += Vector3.forward * zoom;
 
         print(transform.position.z);
 
