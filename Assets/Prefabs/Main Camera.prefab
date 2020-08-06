@@ -60,7 +60,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 65
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -149,10 +149,11 @@ MonoBehaviour:
   targets:
   - {fileID: 0}
   - {fileID: 0}
-  defultPos: {x: 0, y: 2.5, z: 6}
+  defultPos: {x: 0, y: 4, z: 6}
   axis: 0
   posative: 0
   smoothTime: 0.15
-  zoomOffset: 0.06
+  zoomSpeed: 10
+  zoomOffset: -5
   minZoom: 0
-  maxZoom: 2
+  maxZoom: 5

@@ -16,15 +16,21 @@ public class SharedCamera : MonoBehaviour
     public Axis axis;
     public bool posative;
 
+    [Header("Follow Settings")]
+
+    Vector3 center;
     public float smoothTime;
     private Vector3 velocity;
 
+    [Header("Zoom Settings")]
+    public float zoomSpeed = 1;
+    private float zoom;
+
     public float zoomOffset;
+
     public float minZoom;
     public float maxZoom;
-    public float zoom;
-    public float zoomSpeed = 1;
-    Vector3 center;
+
 
     [Header("Unity Things")]
     private Camera cam;
@@ -54,7 +60,7 @@ public class SharedCamera : MonoBehaviour
         zoom = Mathf.MoveTowards(zoom, idealZoom, Time.deltaTime * zoomSpeed);
         transform.position += Vector3.forward * zoom;
 
-        print(transform.position.z);
+        //print(zoom);
 
         //float newZoom = Mathf.Lerp(maxZoom, minZoom, GetGreatestDistance() / zoomAdjustment);
         //cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, newZoom, Time.deltaTime);
