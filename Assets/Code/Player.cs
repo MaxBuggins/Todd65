@@ -85,13 +85,15 @@ public class Player : MonoBehaviour
         if (dead == true)
             return;
 
+        var movey = new Vector3(0,0,0);
+
         if (rotation == Rotation.x) //very bad way but what are you gonna do
-            var movement = new Vector3(-move.x, 0, -move.y) * moveForce * Time.deltaTime;
+            movey = new Vector3(move.y, 0, move.x);
 
         else
-            var movement = new Vector3(-move.y, 0, -move.x) * moveForce * Time.deltaTime;
+            movey = new Vector3(-move.x, 0, -move.y);
 
-        //var movement = new Vector3(-move.x, 0, -move.y) * moveForce * Time.deltaTime;
+        var movement = movey * moveForce * Time.deltaTime;
 
         if (isGrounded == false)
             movement = movement * 0.4f; //less force when not on ground
