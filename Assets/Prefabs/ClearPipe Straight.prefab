@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78827b54c2d2af5499ebe99ef65daff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  suckForce: 2
+  suckForce: 0.5
   nextPipe: {fileID: 0}
   rbs: []
 --- !u!1001 &4005286844533010600

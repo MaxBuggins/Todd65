@@ -4,18 +4,31 @@ using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+public enum Rotation { x, y, z} //stupid dumb
+
 public class Player : MonoBehaviour
 {
+    //full disclosuer spelling is for the weak
+    //grammer also sucks ass
+    private float time;
+
+    [Header("Player State")]
     public bool p1 = true;
     public bool dead = false;
+    public Rotation rotation;
+
     private Vector2 move;
     private bool isGrounded;
-    public PlayerType playerType;
 
     [Header("Player Charchteristics")]
+    public PlayerType playerType;
     private float moveForce;
     private float jumpForce;
     private float gravityMultiplyer = 1;
+    public float jumpDelay = 0.1f;
+
+    private bool canJump = false;
 
     [Header("Unity Things")]
     private MainControls controls;
@@ -45,6 +58,8 @@ public class Player : MonoBehaviour
             controls.Player2.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
             controls.Player2.Move.canceled += ctx => move = Vector2.zero;
         }
+
+        changeOritation(rotation);
     }
 
     private void OnEnable()
@@ -54,14 +69,30 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        time -= Time.deltaTime;
+
         if(rb.useGravity == true) //only if it uses gravity
             rb.AddForce(Physics.gravity * gravityMultiplyer, ForceMode.Acceleration);
 
-        isGrounded = Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * 0.5f + 0.55f);
+        if (time <= 0) //to stop unessery double jumps
+            isGrounded = Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * 0.5f + 0.55f);
+        else
+            isGrounded = false;
+
+        if (isGrounded == true)
+            canJump = true;
 
         if (dead == true)
             return;
-        var movement = new Vector3(-move.x, 0, -move.y) * moveForce * Time.deltaTime;
+
+        if (rotation == Rotation.x) //very bad way but what are you gonna do
+            var movement = new Vector3(-move.x, 0, -move.y) * moveForce * Time.deltaTime;
+
+        else
+            var movement = new Vector3(-move.y, 0, -move.x) * moveForce * Time.deltaTime;
+
+        //var movement = new Vector3(-move.x, 0, -move.y) * moveForce * Time.deltaTime;
+
         if (isGrounded == false)
             movement = movement * 0.4f; //less force when not on ground
 
@@ -73,9 +104,35 @@ public class Player : MonoBehaviour
         if (dead == true)
             return;
 
-        if(isGrounded == true)
+        if (canJump == true)
+        {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        
+            canJump = false;
+            time = jumpDelay;
+        }
+
+    }
+
+    public void changeOritation(Rotation rot)
+    {
+        rotation = rot;
+        switch (rotation)
+        {
+            case(Rotation.x):
+                {
+                    rb.constraints = RigidbodyConstraints.FreezePositionX;
+                    break;
+                }
+            case (Rotation.z):
+                {
+                    rb.constraints = RigidbodyConstraints.FreezePositionZ;
+                    break;
+                }
+            case (Rotation.y): //bit diffrent as player is not constrained cause top down = cool up - gottem
+                {
+                    break;
+                }
+        }
     }
 
     public void Dead()

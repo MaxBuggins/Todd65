@@ -43,9 +43,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7656bdf0dbd23144c94c543da7363b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnDelay: 1
-  spawnRadius: 0.5
+  minSpawnDelay: 0.2
+  maxSpawnDelay: 0.5
+  spawnRadius: 0.6
   spawnables:
   - {fileID: 7888202851660048658, guid: 5097fc319a0edb04fa2edff5d0f85e4f, type: 3}
   - {fileID: 7888202851660048658, guid: 5097fc319a0edb04fa2edff5d0f85e4f, type: 3}
   - {fileID: 2094328343418058960, guid: 5baf6d74eef41b644b7253f91a122e9b, type: 3}
+  destoryDelay: 7

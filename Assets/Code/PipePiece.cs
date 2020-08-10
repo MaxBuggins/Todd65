@@ -14,7 +14,18 @@ public class PipePiece : MonoBehaviour
 
     private void Start()
     {
-        nextPipePos = nextPipe.position;
+        if (nextPipe == null) //if nowhere to go then dont bother with triggers and this script
+        {
+            foreach (Collider collider in GetComponents<Collider>())
+            {
+                if (collider.isTrigger == true)
+                    collider.enabled = false;
+            }
+            enabled = false;
+        }
+
+        else
+            nextPipePos = nextPipe.position;
     }
 
     void Update()

@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 public class SharedCamera : MonoBehaviour
 {
     [Header("Camera Chacrchteristics")]
+    public bool perspective = true;
     public List<Transform> targets;
     public Vector3 defultPos;
 
@@ -51,19 +52,23 @@ public class SharedCamera : MonoBehaviour
         transform.position = center;
 
         //zooms the camera
-        print(GetGreatestDistance());
+        if (perspective == true)
+        {
+            var tan = Mathf.Tan(cam.fieldOfView / 2);
 
-        var tan = Mathf.Tan(cam.fieldOfView / 2);
+            var idealZoom = ((GetGreatestDistance() / 2) / tan) * zoomOffset;
 
-        var idealZoom = ((GetGreatestDistance() / 2) / tan) * zoomOffset;
+            zoom = Mathf.MoveTowards(zoom, idealZoom, Time.deltaTime * zoomSpeed);
+            transform.position += Vector3.forward * zoom;
+        }
 
-        zoom = Mathf.MoveTowards(zoom, idealZoom, Time.deltaTime * zoomSpeed);
-        transform.position += Vector3.forward * zoom;
-
-        //print(zoom);
-
-        //float newZoom = Mathf.Lerp(maxZoom, minZoom, GetGreatestDistance() / zoomAdjustment);
-        //cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, newZoom, Time.deltaTime);
+        else
+        {
+            var idealZoom = ((GetGreatestDistance() / 2) + zoomOffset);
+            zoom = Mathf.MoveTowards(zoom, idealZoom, Time.deltaTime * zoomSpeed);
+            zoom = Mathf.Clamp(zoom, minZoom, maxZoom);
+            cam.orthographicSize = zoom;
+        }
     }
 
     Vector3 GetCenterPoint() //gets the center point for the camera to look at
