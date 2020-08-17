@@ -30,12 +30,17 @@ public class PipePiece : MonoBehaviour
 
     void Update()
     {
-       foreach (Rigidbody rb in rbs)
+        foreach (Rigidbody rb in rbs)
         {
+            if (rb == null)
+            {
+                rbs.Remove(rb);
+                return;
+            }
             var offset = nextPipePos - rb.gameObject.transform.position;
+            rb.useGravity = false;
             rb.AddForce(offset * suckForce);
-            //rb.mass = Mathf.Sqrt(rb.mass);
-        } 
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -45,8 +50,12 @@ public class PipePiece : MonoBehaviour
         {
             rb.useGravity = false;
             rbs.Add(rb);
+            rb.constraints = RigidbodyConstraints.None;
         }
 
+        var player = other.GetComponent<Player>(); //makes the player suck so its not fixed
+        if (player != null)
+            player.sucked = true;
     }
 
     private void OnTriggerExit(Collider other)
@@ -58,5 +67,9 @@ public class PipePiece : MonoBehaviour
             rb.useGravity = true;
             rbs.Remove(rb);
         }
+
+        var player = other.GetComponent<Player>(); //makes the player no longer suck
+        if (player != null)
+            player.sucked = false;
     }
 }

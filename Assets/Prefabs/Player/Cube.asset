@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c818f01876d3ce409faa2aabcb82d20, type: 3}
   m_Name: Cube
   m_EditorClassIdentifier: 
-  moveForce: 1500
-  jumpForce: 11
-  gravityMultiplyer: 1
+  moveForce: 2000
+  jumpForce: 12
+  gravityMultiplyer: 1.5

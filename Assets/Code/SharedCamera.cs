@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,10 +9,15 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(Camera))]
 public class SharedCamera : MonoBehaviour
 {
+    public static SharedCamera instance;
+
     [Header("Camera Chacrchteristics")]
+    public bool equalShare = true;
     public bool perspective = true;
     public List<Transform> targets;
-    public Vector3 defultPos;
+    public Vector2 offset;
+    private Vector3 defultPos;
+    public float turnSpeed = 90f;
 
     public enum Axis{x, y, z}
     public Axis axis;
@@ -31,13 +37,14 @@ public class SharedCamera : MonoBehaviour
 
     public float minZoom;
     public float maxZoom;
-
+    public GameRotationChange currentZone;
 
     [Header("Unity Things")]
     private Camera cam;
 
     private void Start()
     {
+        instance = this;
         cam = GetComponent<Camera>();
     }
 
@@ -45,9 +52,32 @@ public class SharedCamera : MonoBehaviour
     {
         if (targets.Count == 0) //no targets to follow
             return;
-        
+
+        float playersTotalAngle = 0;
+
+        if (targets.Count != 0)
+        {
+            Vector3 angles = transform.eulerAngles;
+            
+            foreach (Transform player in targets)
+            {
+                playersTotalAngle += player.GetComponent<Player>().currentZone.transform.eulerAngles.y;
+            }
+            float desiredAngle = (playersTotalAngle) / targets.Count + 180; //averages angle inbetween players
+
+
+            angles.y = Mathf.MoveTowardsAngle(angles.y, desiredAngle, turnSpeed * Time.deltaTime);
+            transform.eulerAngles = angles;
+        }
+
+        defultPos = offset.x * Vector3.up - offset.y * transform.forward; //applys the offset to camera
+
         //moves the camera
         Vector3 centerpoint = GetCenterPoint();
+        if(equalShare == false)
+            centerpoint = GetFrontTarget();
+
+
         center = Vector3.SmoothDamp(center, centerpoint + defultPos, ref velocity, smoothTime);
         transform.position = center;
 
@@ -92,5 +122,16 @@ public class SharedCamera : MonoBehaviour
             bounds.Encapsulate(targets[i].position);
         }
         return bounds.size.x;
+    }
+
+    Vector3 GetFrontTarget()
+    {
+        var furthestTarget = targets[0];
+        foreach (Transform target in targets)
+        {
+            if (target.position.x > furthestTarget.position.x)
+                furthestTarget = target;
+        }
+        return (furthestTarget.position);
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveingPlatform : MonoBehaviour
 {
-    private float time;
+    public float time;
     [Header("Variables")]
     public bool pushOff = false;
     public float moveSpeed = 5f;
@@ -22,7 +22,6 @@ public class MoveingPlatform : MonoBehaviour
         startPosition = transform.position;
         endPosition += startPosition; //makes the next postion relative to the start position
         nextPosition = endPosition;
-        time = stopDelay;
     }
 
     void FixedUpdate()

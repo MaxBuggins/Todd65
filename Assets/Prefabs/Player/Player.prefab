@@ -157,5 +157,9 @@ MonoBehaviour:
   p1: 1
   dead: 0
   rotation: 2
+  sucked: 0
   playerType: {fileID: 0}
+  gravityMultiplyer: 2
   jumpDelay: 0.1
+  maxVelocityXZ: 15
+  currentZone: {fileID: 0}
