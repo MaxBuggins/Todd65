@@ -31,19 +31,20 @@ public class Player : MonoBehaviour
     public float jumpDelay = 0.1f;
     public float maxVelocityXZ;
 
-    private bool canJump = false;
-
     public GameRotationChange currentZone;
 
     [Header("Unity Things")]
     private MainControls controls; //refrence to Unitys input system
     private Rigidbody rb;
-
+    private GameManager gameManager;
+    private RaycastHit hit;
+    private List<ContactPoint> contacts = new List<ContactPoint>(); //array of recent collisions
 
     void Awake()
     {
         //sets up componet refrences
         rb = GetComponent<Rigidbody>();
+        gameManager = FindObjectOfType<GameManager>();
 
         Camera.main.GetComponent<SharedCamera>().targets.Add(this.transform); //gets the camera to focus on it
 
@@ -90,18 +91,22 @@ public class Player : MonoBehaviour
     {
         time -= Time.deltaTime; //time is decressed depending on how much time has passed since last update
 
+
         if (time <= 0) //dosen't check untill jump delay has completed
-            isGrounded = Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * 0.5f + 0.1f);
+            if(Physics.SphereCast(new Ray(transform.position, Vector3.down), 0.3f, out hit, 0.75f))
+            {
+                if (hit.collider.transform == transform) //its self doesn't count
+                    isGrounded = false;
+                else
+                    isGrounded = true;
+            }   
         else
             isGrounded = false; //for if timer has not runout
-
-        if (isGrounded == true) //if the raycast hist then the player can jump
-            canJump = true;
 
         //constrains the max velocity of the player
         Vector3 newVelocity = rb.velocity;
         //clamps for each axis
-        newVelocity.x = (Mathf.Clamp(rb.velocity.x, -maxVelocityXZ, maxVelocityXZ   ));
+        newVelocity.x = (Mathf.Clamp(rb.velocity.x, -maxVelocityXZ, maxVelocityXZ));
         newVelocity.z = (Mathf.Clamp(rb.velocity.z, -maxVelocityXZ, maxVelocityXZ));
         //falling and jumping are not clamped
 
@@ -114,7 +119,7 @@ public class Player : MonoBehaviour
         if (dead == true)
             return;
 
-        var movey = (SharedCamera.instance.transform.right)* move.x + (SharedCamera.instance.transform.forward) * move.y;
+        var movey = (SharedCamera.instance.transform.right) * move.x + (SharedCamera.instance.transform.forward) * move.y;
         var movement = movey * moveForce * Time.deltaTime;
 
         if (isGrounded == false)
@@ -124,16 +129,40 @@ public class Player : MonoBehaviour
             rb.AddForce(movement, ForceMode.Force);
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if (contacts.Count > 7)
+        {
+            contacts.RemoveAt(7);
+            contacts.Insert(0, collision.GetContacts();
+        }
+        
+        Vector3 boarderNorm = Vector3.zero;
+
+        for(int i = 0; i < collision.contactCount && i < 10; i++)
+        {
+            if(contacts[i].otherCollider.gameObject.GetComponent<CamBoarder>() != null)
+            {
+                boarderNorm = contacts[i].normal;
+            }
+        }
+        for (int i = 0; i < collision.contactCount && i < 10; i++)
+        {
+            if (Vector3.Dot(boarderNorm, contacts[i].normal) < -0.8f)
+                Dead();
+        }
+    }
+
     void Jump()
     {
         if (dead == true)
             return;
 
-        if (canJump == true && sucked == false) //checks if jumping is allowed
+        if (isGrounded == true && sucked == false) //checks if jumping is allowed
         {   
             //adds an instant force upwards
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            canJump = false; //stops player from jumping untill its hit floor again
+            isGrounded = false; //stops player from jumping untill its hit floor again
             time = jumpDelay; //sets a small delay until it can jump again
         }
 
@@ -164,8 +193,25 @@ public class Player : MonoBehaviour
 
     public void Dead()
     {
+        print("dead");
         dead = true;
         rb.constraints = RigidbodyConstraints.None;
         Camera.main.GetComponent<SharedCamera>().targets.Remove(transform); //removes it self from the cameras focus
+
+        if (p1 == true) //bad yes, i dont care right now maybe later
+            gameManager.p1Score -= 10;
+        else
+            gameManager.p2Score -= 10;
+
+        var players = FindObjectsOfType<Player>();
+
+        foreach(Player player in players) //checks if its the only player left and if so it can respawn
+        {
+            if (player != this)
+                if(player.p1 == p1) //if there is other players (clones) then destory this one
+                {
+                    Destroy(gameObject);
+                }
+        }
     }
 }

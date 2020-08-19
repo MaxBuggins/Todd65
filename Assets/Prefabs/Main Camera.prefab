@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5143296910679253678}
   - component: {fileID: 2437315192260965797}
   - component: {fileID: 4758165269253836583}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: CameraBoarder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,12 +29,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2327839396249539678}
   m_LocalRotation: {x: -0.17348288, y: -0.007574429, z: -0.042956725, w: 0.98387045}
-  m_LocalPosition: {x: -3.5, y: 0, z: 2}
-  m_LocalScale: {x: 2, y: 35, z: 3}
+  m_LocalPosition: {x: -6.5, y: 0, z: 10}
+  m_LocalScale: {x: 2, y: 35, z: 4}
   m_Children: []
   m_Father: {fileID: 6565186676087312971}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -5}
+  m_LocalEulerAnglesHint: {x: -10, y: 0, z: -5}
 --- !u!33 &556570795742961021
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -353,7 +353,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6565186676087312967}
-  m_LocalRotation: {x: 0, y: 0.9848078, z: -0.17364816, w: 0}
+  m_LocalRotation: {x: 0.08715578, y: 0, z: 0, w: 0.9961947}
   m_LocalPosition: {x: -3, y: 4, z: 8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -481,7 +481,7 @@ MonoBehaviour:
   posative: 0
   smoothTime: 0.15
   zoomSpeed: 2.5
-  zoomOffset: 1
-  minZoom: 6
-  maxZoom: 10
+  zoomOffset: 0
+  minZoom: 8
+  maxZoom: 14
   currentZone: {fileID: 0}
