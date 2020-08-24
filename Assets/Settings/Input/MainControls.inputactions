@@ -2,6 +2,33 @@
     "name": "MainControls",
     "maps": [
         {
+            "name": "Shared",
+            "id": "ea3f9272-9b43-4487-b686-05405ed7ca76",
+            "actions": [
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "ed36b0f7-3b02-4305-b2a6-90b5d5b2fb17",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "036ba28a-b3b4-4fa1-bcd1-118020085859",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "Player1",
             "id": "462e8f27-5d40-4133-b0aa-b2717a65ce42",
             "actions": [

@@ -140,7 +140,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 0
+  m_Constraints: 8
   m_CollisionDetection: 1
 --- !u!114 &2633581336468722778
 MonoBehaviour:
@@ -158,8 +158,14 @@ MonoBehaviour:
   dead: 0
   rotation: 2
   sucked: 0
-  playerType: {fileID: 0}
+  playerType: {fileID: 11400000, guid: ffc22aa51247ce34b9add6726005bef0, type: 2}
+  moveForce: 0
+  jumpForce: 0
   gravityMultiplyer: 2
   jumpDelay: 0.1
   maxVelocityXZ: 15
   currentZone: {fileID: 0}
+  BrokenBody: {fileID: 2732487954666353443, guid: cfbe7c512d5c6d742a0add06b1a2c962,
+    type: 3}
+  redMaterial: {fileID: 2100000, guid: 01f161f488c48bc4db74137f15abffa2, type: 2}
+  blueMaterial: {fileID: 2100000, guid: c49fa18f1b3917845984af64886cf809, type: 2}

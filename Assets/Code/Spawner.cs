@@ -9,6 +9,7 @@ public class Spawner : MonoBehaviour
     public float maxSpawnDelay;
 
     public float spawnRadius;
+    public RigidbodyConstraints rbConstaint;
 
     public GameObject[] spawnables;
 
@@ -26,7 +27,8 @@ public class Spawner : MonoBehaviour
 
         if (time <= 0)
         {
-            var obj = Instantiate(spawnables[Random.Range(0, spawnables.Length)], transform.position + Random.insideUnitSphere * spawnRadius, transform.rotation);
+            var obj = Instantiate(spawnables[Random.Range(0, spawnables.Length)], transform.position + Random.insideUnitSphere * spawnRadius, Random.rotation);
+            obj.GetComponent<Rigidbody>().constraints = rbConstaint;
             if (destoryDelay != 0)
             {
                 obj.AddComponent<SelfDestruct>();

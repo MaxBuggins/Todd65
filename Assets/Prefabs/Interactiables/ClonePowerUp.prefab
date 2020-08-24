@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 92679419767803844}
   - component: {fileID: 3956017435012808801}
   - component: {fileID: 1225664834618537131}
-  - component: {fileID: -4330060758050995287}
+  - component: {fileID: 5831772590004722432}
   - component: {fileID: 8278035869241031507}
   m_Layer: 0
   m_Name: ClonePowerUp
@@ -81,8 +81,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &-4330060758050995287
-MeshCollider:
+--- !u!136 &5831772590004722432
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -91,10 +91,10 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5822923633663461879, guid: c58b0ef6880e8ff4aae21d6c229b718e, type: 3}
+  m_Radius: 0.25
+  m_Height: 1.15
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8278035869241031507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,6 +108,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUp: 2
-  moveAmount: 0.15
+  points: 0
+  opisitePickUp: 0
+  closestPlayer: {fileID: 0}
+  moveAmount: 0.25
   moveSpeed: 1.5
   rotSpeed: 1.5

@@ -25,8 +25,8 @@ public class Player : MonoBehaviour
 
     [Header("Player Charchteristics")]
     public PlayerType playerType;
-    private float moveForce;
-    private float jumpForce;
+    public float moveForce;
+    public float jumpForce;
     public float gravityMultiplyer = 1;
     public float jumpDelay = 0.1f;
     public float maxVelocityXZ;
@@ -34,17 +34,29 @@ public class Player : MonoBehaviour
     public GameRotationChange currentZone;
 
     [Header("Unity Things")]
+    public GameObject BrokenBody;
     private MainControls controls; //refrence to Unitys input system
+    
+    private Renderer render;
+    public Material redMaterial;
+    public Material blueMaterial;
+
     private Rigidbody rb;
+    private Vector3 pausedVelocity; //for when the game is paused
+    private Vector3 pausedAngularVelocity; //for when the game is paused
+
     private GameManager gameManager;
     private RaycastHit hit;
-    private List<ContactPoint> contacts = new List<ContactPoint>(); //array of recent collisions
+
+    private Collider camBoarder;
 
     void Awake()
     {
         //sets up componet refrences
         rb = GetComponent<Rigidbody>();
         gameManager = FindObjectOfType<GameManager>();
+        render = GetComponent<Renderer>();
+        camBoarder = FindObjectOfType<CamBoarder>().gameObject.GetComponent<Collider>();
 
         Camera.main.GetComponent<SharedCamera>().targets.Add(this.transform); //gets the camera to focus on it
 
@@ -59,12 +71,14 @@ public class Player : MonoBehaviour
 
         if (p1 == true) //checks if this script is for player1 if so takes player 1 inputs
         {
+            render.material = redMaterial;
             controls.Player1.Jump.performed += ctx => Jump();
             controls.Player1.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
             controls.Player1.Move.canceled += ctx => move = Vector2.zero;
         }
         else //else it must be player 2 and takes in player2's input
         {
+            render.material = blueMaterial;
             controls.Player2.Jump.performed += ctx => Jump();
             controls.Player2.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
             controls.Player2.Move.canceled += ctx => move = Vector2.zero;
@@ -89,6 +103,9 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (gameManager.paused == true)
+            return;
+
         time -= Time.deltaTime; //time is decressed depending on how much time has passed since last update
 
 
@@ -124,32 +141,46 @@ public class Player : MonoBehaviour
 
         if (isGrounded == false)
             movement = movement * 0.4f; //less force when not on ground
+        else
+            rb.AddForce(Physics.gravity * 1.25f, ForceMode.Acceleration);
 
         if (sucked == false)
             rb.AddForce(movement, ForceMode.Force);
+
+        CrushCheck(); //check if the player has been crushed
     }
 
+    Dictionary<Collider, List<ContactPoint>> contacts = new Dictionary<Collider, List<ContactPoint>>();
     private void OnCollisionStay(Collision collision)
     {
-        if (contacts.Count > 7)
-        {
-            contacts.RemoveAt(7);
-            contacts.Insert(0, collision.GetContacts();
-        }
-        
-        Vector3 boarderNorm = Vector3.zero;
+        contacts[collision.collider] = new List<ContactPoint>();
+        contacts[collision.collider].AddRange(collision.contacts);
+    }
 
-        for(int i = 0; i < collision.contactCount && i < 10; i++)
+    private void OnCollisionExit(Collision collision)
+    {
+        contacts.Remove(collision.collider);
+    }
+
+    private void CrushCheck()
+    {
+        // check if the crusher is crushing us
+        if (camBoarder && contacts.ContainsKey(camBoarder))
         {
-            if(contacts[i].otherCollider.gameObject.GetComponent<CamBoarder>() != null)
+            Vector3 crusherNormal = contacts[camBoarder][0].normal;
+
+            foreach (KeyValuePair<Collider, List<ContactPoint>> pair in contacts)
             {
-                boarderNorm = contacts[i].normal;
+                foreach (ContactPoint cp in pair.Value)
+                {
+                    if (Vector3.Dot(crusherNormal, cp.normal) < -0.8f)
+                    {
+                        print("dead");
+                        Dead();
+                    }
+                }
             }
-        }
-        for (int i = 0; i < collision.contactCount && i < 10; i++)
-        {
-            if (Vector3.Dot(boarderNorm, contacts[i].normal) < -0.8f)
-                Dead();
+
         }
     }
 
@@ -172,7 +203,7 @@ public class Player : MonoBehaviour
         rotation = rot;
         switch (rotation)
         {
-            case(Rotation.x):
+            case (Rotation.x):
                 {
                     rb.constraints = RigidbodyConstraints.FreezePositionX;
                     transform.position = new Vector3(lockPos, transform.position.y, transform.position.z);
@@ -193,7 +224,6 @@ public class Player : MonoBehaviour
 
     public void Dead()
     {
-        print("dead");
         dead = true;
         rb.constraints = RigidbodyConstraints.None;
         Camera.main.GetComponent<SharedCamera>().targets.Remove(transform); //removes it self from the cameras focus
@@ -205,13 +235,48 @@ public class Player : MonoBehaviour
 
         var players = FindObjectsOfType<Player>();
 
-        foreach(Player player in players) //checks if its the only player left and if so it can respawn
+        Instantiate(BrokenBody, transform.position, transform.rotation);
+
+        if(players.Length <= 1) //only player left
         {
-            if (player != this)
-                if(player.p1 == p1) //if there is other players (clones) then destory this one
+            gameManager.GameOver(false); //tells the gameManager that the game is over with win set to false
+            Destroy(gameObject);
+        }
+
+        foreach (Player player in players) //checks if its the only player left and if so it can respawn
+        {
+            if (player != this) //doesn't check it self
+                if(player.p1 == p1) //only checks those that are the same p1 value
                 {
-                    Destroy(gameObject);
+                    {
+                        Destroy(gameObject); //if there is anthor player on the same 'team' then this is just a clone and then you can destory
+                    }
                 }
+        }
+
+        Spawn();
+    }
+    public void Spawn()
+    {
+        Destroy(gameObject);
+    }
+
+    public void Pause(bool paused)
+    {
+        if (paused == true)
+        {
+            pausedVelocity = rb.velocity;
+            pausedAngularVelocity = rb.angularVelocity;
+            controls.Disable();
+        }
+
+        rb.isKinematic = paused;
+
+        if (paused == false)
+        {
+            rb.velocity = pausedVelocity;
+            rb.angularVelocity = pausedAngularVelocity;
+            controls.Enable();
         }
     }
 }

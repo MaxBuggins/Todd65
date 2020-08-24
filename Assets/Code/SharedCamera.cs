@@ -53,22 +53,22 @@ public class SharedCamera : MonoBehaviour
         if (targets.Count == 0) //no targets to follow
             return;
 
-        float playersTotalAngle = 0;
+        //float playersTotalAngle = 0;
 
-        if (targets.Count != 0)
-        {
-            Vector3 angles = transform.eulerAngles;
+        //if (targets.Count != 0) //for switching camera angles at trigger points (SCRAPED) so sad it was cool
+        //{
+            //Vector3 angles = transform.eulerAngles;
             
-            foreach (Transform player in targets)
-            {
-                playersTotalAngle += player.GetComponent<Player>().currentZone.transform.eulerAngles.y;
-            }
-            float desiredAngle = (playersTotalAngle) / targets.Count + 180; //averages angle inbetween players
+            //foreach (Transform player in targets)
+            //{
+            //    playersTotalAngle += player.GetComponent<Player>().currentZone.transform.eulerAngles.y;
+            //}
+            //float desiredAngle = (playersTotalAngle) / targets.Count + 180; //averages angle inbetween players
 
 
-            angles.y = Mathf.MoveTowardsAngle(angles.y, desiredAngle, turnSpeed * Time.deltaTime);
-            transform.eulerAngles = angles;
-        }
+            //angles.y = Mathf.MoveTowardsAngle(angles.y, desiredAngle, turnSpeed * Time.deltaTime);
+            //transform.eulerAngles = angles;
+        //}
 
         defultPos = offset.x * Vector3.up - offset.y * transform.forward; //applys the offset to camera
 

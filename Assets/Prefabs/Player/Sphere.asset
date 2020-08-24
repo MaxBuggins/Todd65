@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Sphere
   m_EditorClassIdentifier: 
   moveForce: 4000
-  jumpForce: 14
-  gravityMultiplyer: 1.4
+  jumpForce: 13
+  gravityMultiplyer: 2

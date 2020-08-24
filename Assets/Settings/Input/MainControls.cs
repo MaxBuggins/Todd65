@@ -15,6 +15,33 @@ public class @MainControls : IInputActionCollection, IDisposable
     ""name"": ""MainControls"",
     ""maps"": [
         {
+            ""name"": ""Shared"",
+            ""id"": ""ea3f9272-9b43-4487-b686-05405ed7ca76"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed36b0f7-3b02-4305-b2a6-90b5d5b2fb17"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""036ba28a-b3b4-4fa1-bcd1-118020085859"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Player1"",
             ""id"": ""462e8f27-5d40-4133-b0aa-b2717a65ce42"",
             ""actions"": [
@@ -197,6 +224,9 @@ public class @MainControls : IInputActionCollection, IDisposable
     ],
     ""controlSchemes"": []
 }");
+        // Shared
+        m_Shared = asset.FindActionMap("Shared", throwIfNotFound: true);
+        m_Shared_Pause = m_Shared.FindAction("Pause", throwIfNotFound: true);
         // Player1
         m_Player1 = asset.FindActionMap("Player1", throwIfNotFound: true);
         m_Player1_Move = m_Player1.FindAction("Move", throwIfNotFound: true);
@@ -250,6 +280,39 @@ public class @MainControls : IInputActionCollection, IDisposable
     {
         asset.Disable();
     }
+
+    // Shared
+    private readonly InputActionMap m_Shared;
+    private ISharedActions m_SharedActionsCallbackInterface;
+    private readonly InputAction m_Shared_Pause;
+    public struct SharedActions
+    {
+        private @MainControls m_Wrapper;
+        public SharedActions(@MainControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Pause => m_Wrapper.m_Shared_Pause;
+        public InputActionMap Get() { return m_Wrapper.m_Shared; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(SharedActions set) { return set.Get(); }
+        public void SetCallbacks(ISharedActions instance)
+        {
+            if (m_Wrapper.m_SharedActionsCallbackInterface != null)
+            {
+                @Pause.started -= m_Wrapper.m_SharedActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_SharedActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_SharedActionsCallbackInterface.OnPause;
+            }
+            m_Wrapper.m_SharedActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
+            }
+        }
+    }
+    public SharedActions @Shared => new SharedActions(this);
 
     // Player1
     private readonly InputActionMap m_Player1;
@@ -332,6 +395,10 @@ public class @MainControls : IInputActionCollection, IDisposable
         }
     }
     public Player2Actions @Player2 => new Player2Actions(this);
+    public interface ISharedActions
+    {
+        void OnPause(InputAction.CallbackContext context);
+    }
     public interface IPlayer1Actions
     {
         void OnMove(InputAction.CallbackContext context);
