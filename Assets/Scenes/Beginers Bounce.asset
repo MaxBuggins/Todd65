@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Beginers Bounce
   m_EditorClassIdentifier: 
   levelName: Beginners Bounce
-  difficilty: 0
-  levelPreview: {fileID: 21300000, guid: fa27dfd54c7592d4db45fbfa2697afa4, type: 3}
+  difficilty: 1
+  levelPreview: {fileID: 21300000, guid: 2db370e4e7812a04f8af96ea043d59a4, type: 3}
   level: {fileID: 102900000, guid: 094cf6608b1427a44b878eb64de9c752, type: 3}

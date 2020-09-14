@@ -8,7 +8,7 @@ public class OutOfBounds : MonoBehaviour
     {
         var player = other.gameObject.GetComponent<Player>();
         if (player != null)
-            player.Dead();
+            player.Dead(true);
         
         else
             Destroy(other.gameObject);

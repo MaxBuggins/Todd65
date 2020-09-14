@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public enum Rotation {x, y, z} //stupid dumb
+public enum Rotation { x, y, z } //stupid dumb
 
 public class Player : MonoBehaviour
 {
@@ -35,8 +35,9 @@ public class Player : MonoBehaviour
 
     [Header("Unity Things")]
     public GameObject BrokenBody;
+    public GameObject playerSpawner;
     private MainControls controls; //refrence to Unitys input system
-    
+
     private Renderer render;
     public Material redMaterial;
     public Material blueMaterial;
@@ -50,24 +51,28 @@ public class Player : MonoBehaviour
 
     private Collider camBoarder;
 
-    void Awake()
+    void Awake() //needs start because applying controls need to happen first but p1 state needs to be before start
     {
         //sets up componet refrences
         rb = GetComponent<Rigidbody>();
         gameManager = FindObjectOfType<GameManager>();
         render = GetComponent<Renderer>();
-        camBoarder = FindObjectOfType<CamBoarder>().gameObject.GetComponent<Collider>();
+        if (FindObjectOfType<CamBoarder>() != null)
+            camBoarder = FindObjectOfType<CamBoarder>().gameObject.GetComponent<Collider>();
 
         Camera.main.GetComponent<SharedCamera>().targets.Add(this.transform); //gets the camera to focus on it
 
+        //sets up input events
+        controls = new MainControls();
+    }
+
+    void Start() //need start because dumb
+    {
 
         //applys player type variables
         moveForce = playerType.moveForce * rb.mass;
         jumpForce = playerType.jumpForce * rb.mass;
         gravityMultiplyer = playerType.gravityMultiplyer;
-
-        //sets up input events
-        controls = new MainControls();
 
         if (p1 == true) //checks if this script is for player1 if so takes player 1 inputs
         {
@@ -84,7 +89,7 @@ public class Player : MonoBehaviour
             controls.Player2.Move.canceled += ctx => move = Vector2.zero;
         }
 
-        if(rotation == Rotation.x)
+        if (rotation == Rotation.x)
         {
             lockPos = transform.position.x;
         }
@@ -110,15 +115,18 @@ public class Player : MonoBehaviour
 
 
         if (time <= 0) //dosen't check untill jump delay has completed
-            if(Physics.SphereCast(new Ray(transform.position, Vector3.down), 0.3f, out hit, 0.75f))
+            if (Physics.SphereCast(new Ray(transform.position, Vector3.down), 0.3f, out hit, 0.75f))
             {
                 if (hit.collider.transform == transform) //its self doesn't count
                     isGrounded = false;
                 else
                     isGrounded = true;
-            }   
-        else
-            isGrounded = false; //for if timer has not runout
+
+                if (hit.collider.gameObject.GetComponent<Bouncer>()) //bounce pads cannot be jumped off
+                    isGrounded = false;
+            }
+            else
+                isGrounded = false; //for if timer has not runout
 
         //constrains the max velocity of the player
         Vector3 newVelocity = rb.velocity;
@@ -146,6 +154,7 @@ public class Player : MonoBehaviour
 
         if (sucked == false)
             rb.AddForce(movement, ForceMode.Force);
+
 
         CrushCheck(); //check if the player has been crushed
     }
@@ -176,11 +185,10 @@ public class Player : MonoBehaviour
                     if (Vector3.Dot(crusherNormal, cp.normal) < -0.8f)
                     {
                         print("dead");
-                        Dead();
+                        Dead(true);
                     }
                 }
             }
-
         }
     }
 
@@ -190,7 +198,7 @@ public class Player : MonoBehaviour
             return;
 
         if (isGrounded == true && sucked == false) //checks if jumping is allowed
-        {   
+        {
             //adds an instant force upwards
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false; //stops player from jumping untill its hit floor again
@@ -198,7 +206,7 @@ public class Player : MonoBehaviour
         }
 
     }
-    public void changeOritation(Rotation rot, float lockPos)
+    public void changeOritation(Rotation rot, float lockPos) //this is kinda cut stuff but yeah
     {
         rotation = rot;
         switch (rotation)
@@ -222,42 +230,56 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void Dead()
+    public void Dead(bool lose)
     {
         dead = true;
         rb.constraints = RigidbodyConstraints.None;
         Camera.main.GetComponent<SharedCamera>().targets.Remove(transform); //removes it self from the cameras focus
 
-        if (p1 == true) //bad yes, i dont care right now maybe later
-            gameManager.p1Score -= 10;
-        else
-            gameManager.p2Score -= 10;
-
         var players = FindObjectsOfType<Player>();
+        var brokenBody = Instantiate(BrokenBody, transform.position, transform.rotation);
 
-        Instantiate(BrokenBody, transform.position, transform.rotation);
+        if (p1 == true) //so the broken body is the same colour
+            foreach (Renderer render in brokenBody.GetComponents<Renderer>())
+                render.material = redMaterial;
+        else
+            foreach (Renderer render in brokenBody.GetComponents<Renderer>())
+                render.material = blueMaterial;
 
-        if(players.Length <= 1) //only player left
+        if (lose == true)
         {
-            gameManager.GameOver(false); //tells the gameManager that the game is over with win set to false
-            Destroy(gameObject);
-        }
+            if (p1 == true) //bad yes, i dont care right now maybe later
+                gameManager.p1Score -= 10;
+            else
+                gameManager.p2Score -= 10;
 
-        foreach (Player player in players) //checks if its the only player left and if so it can respawn
-        {
-            if (player != this) //doesn't check it self
-                if(player.p1 == p1) //only checks those that are the same p1 value
-                {
+            if (players.Length <= 1) //only player left
+            {
+                gameManager.GameOver(false); //tells the gameManager that the game is over with win set to false
+                Destroy(gameObject);
+            }
+
+            bool clone = false;
+            foreach (Player player in players) //checks if its the only player left and if so it can respawn
+            {
+                if (player != this) //doesn't check it self
+                    if (player.p1 == p1) //only checks those that are the same p1 value
                     {
+                        clone = true;
                         Destroy(gameObject); //if there is anthor player on the same 'team' then this is just a clone and then you can destory
                     }
-                }
+            }
+            if (clone == false)
+                Spawn();
         }
-
-        Spawn();
+        else
+            Destroy(gameObject);
     }
+
     public void Spawn()
     {
+        var spawner = Instantiate(playerSpawner);
+        spawner.GetComponent<PlayerSpawner>().p1 = p1;
         Destroy(gameObject);
     }
 

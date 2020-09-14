@@ -13,8 +13,8 @@ public class MoveingPlatform : MonoBehaviour
 
 
     [Header("Unity Things")]
-    private Vector3 startPosition;
     public Vector3 endPosition;
+    private Vector3 startPosition;
     private Vector3 nextPosition;
 
     void Start()
@@ -51,16 +51,23 @@ public class MoveingPlatform : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        var rb = other.gameObject.GetComponent<Rigidbody>();
         var player = other.gameObject.GetComponent<Player>();
-
-        if (player != null && pushOff == true)
+        if (pushOff == true)
         {
-            player.Dead();
+            if (rb != null)
+                rb.constraints = RigidbodyConstraints.None;
+            if (player != null)
+            {
+                player.Dead(true);
+            }
         }
 
-        if (other.gameObject.GetComponent<Rigidbody>() != null)
+        if (rb != null)
         {
-                other.transform.parent = transform;
+            if (rb.isKinematic == true)
+                return;
+            other.transform.parent = transform;
         }
     }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CamBoarder : MonoBehaviour
 {
+    public bool vertical = false;
     public float smoothTime;
 
     public Vector3 offset;
@@ -20,7 +21,14 @@ public class CamBoarder : MonoBehaviour
 
     void Update()
     {
-        var newPos = new Vector3(cam.transform.position.x - (cam.orthographicSize * 2.1f), cam.transform.position.y, offset.z);
+        var newPos = Vector3.zero;
+
+        if (vertical == false)
+            newPos = new Vector3(cam.transform.position.x - (cam.orthographicSize * 2.1f), cam.transform.position.y, offset.z);
+        if (vertical == true)
+            newPos = new Vector3(cam.transform.position.x, cam.transform.position.y - (cam.orthographicSize * 1.3f), offset.z);
+
         transform.position = newPos;
+        
     }
 }

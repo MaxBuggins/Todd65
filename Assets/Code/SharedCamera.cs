@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +13,7 @@ public class SharedCamera : MonoBehaviour
     [Header("Camera Chacrchteristics")]
     public bool equalShare = true;
     public bool perspective = true;
+    public bool vertical = false;
     public List<Transform> targets;
     public Vector2 offset;
     private Vector3 defultPos;
@@ -53,30 +53,13 @@ public class SharedCamera : MonoBehaviour
         if (targets.Count == 0) //no targets to follow
             return;
 
-        //float playersTotalAngle = 0;
-
-        //if (targets.Count != 0) //for switching camera angles at trigger points (SCRAPED) so sad it was cool
-        //{
-            //Vector3 angles = transform.eulerAngles;
-            
-            //foreach (Transform player in targets)
-            //{
-            //    playersTotalAngle += player.GetComponent<Player>().currentZone.transform.eulerAngles.y;
-            //}
-            //float desiredAngle = (playersTotalAngle) / targets.Count + 180; //averages angle inbetween players
-
-
-            //angles.y = Mathf.MoveTowardsAngle(angles.y, desiredAngle, turnSpeed * Time.deltaTime);
-            //transform.eulerAngles = angles;
-        //}
-
         defultPos = offset.x * Vector3.up - offset.y * transform.forward; //applys the offset to camera
 
         //moves the camera
         Vector3 centerpoint = GetCenterPoint();
+        centerpoint.y = Screen.height / 2;
         if(equalShare == false)
             centerpoint = GetFrontTarget();
-
 
         center = Vector3.SmoothDamp(center, centerpoint + defultPos, ref velocity, smoothTime);
         transform.position = center;
@@ -95,9 +78,17 @@ public class SharedCamera : MonoBehaviour
         else
         {
             var idealZoom = ((GetGreatestDistance() / 2) + zoomOffset);
+            idealZoom = Mathf.Max(idealZoom, GetFrontTarget().y * 1.5f);
             zoom = Mathf.MoveTowards(zoom, idealZoom, Time.deltaTime * zoomSpeed);
             zoom = Mathf.Clamp(zoom, minZoom, maxZoom);
             cam.orthographicSize = zoom;
+
+            if (vertical == false)
+            {
+                Vector3 pos = transform.position;
+                pos.y = cam.orthographicSize * cam.aspect / 2 + offset.y * Mathf.Tan(transform.eulerAngles.x * Mathf.Deg2Rad);
+                transform.position = pos;
+            }
         }
     }
 
@@ -129,8 +120,16 @@ public class SharedCamera : MonoBehaviour
         var furthestTarget = targets[0];
         foreach (Transform target in targets)
         {
-            if (target.position.x > furthestTarget.position.x)
-                furthestTarget = target;
+            if (vertical == false)
+            {
+                if (target.position.x > furthestTarget.position.x)
+                    furthestTarget = target;
+            }
+            else
+            {
+                if (target.position.y > furthestTarget.position.y)
+                    furthestTarget = target;
+            }
         }
         return (furthestTarget.position);
     }

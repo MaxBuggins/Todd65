@@ -39,11 +39,6 @@ public class UI_LevelChoice : MonoBehaviour
                     levelDifficultyUI.color = Color.red;
                     break;
                 }
-            case (Difficulty.TeamWork):
-                {
-                    levelDifficultyUI.color = Color.black;
-                    break;
-                }
         }
 
         levelSprite.sprite = levelType.levelPreview;

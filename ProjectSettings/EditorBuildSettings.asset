@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Biginners Bounce.unity
     guid: 094cf6608b1427a44b878eb64de9c752
+  - enabled: 1
+    path: Assets/Scenes/IndustralIndustry.unity
+    guid: 98996565a08059146ba8ac693766544b
+  - enabled: 1
+    path: Assets/Scenes/MainBoards/DebugBoard.unity
+    guid: 0c080a443fc645f4baa7936d42bc5c09
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9b459491e364a4442a43e839c8873f84,
       type: 2}

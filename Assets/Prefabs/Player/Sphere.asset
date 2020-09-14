@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c818f01876d3ce409faa2aabcb82d20, type: 3}
   m_Name: Sphere
   m_EditorClassIdentifier: 
-  moveForce: 4000
-  jumpForce: 13
+  moveForce: 3500
+  jumpForce: 14
   gravityMultiplyer: 2

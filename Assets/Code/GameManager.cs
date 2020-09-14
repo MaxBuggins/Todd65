@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("Game Stats")]
     public bool paused = true;
-
+    public bool gameOver = false;
 
     public int p1Score;
     public int p2Score;
@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public GameObject mainScreen;
     public GameObject pauseScreen;
     public GameObject loseScreen;
+    public GameObject winScreen;
     
     private MainControls controls; //refrence to Unitys input system
 
@@ -78,12 +79,24 @@ public class GameManager : MonoBehaviour
 
     public void GameOver(bool win)
     {
+        gameOver = true;
         mainScreen.SetActive(false);
-        if(win == false)
+
+        foreach (PlayerSpawner playerSpawner in FindObjectsOfType<PlayerSpawner>()) //stops players spawning
+        {
+            playerSpawner.controls.Disable();
+            Destroy(playerSpawner.gameObject);
+        }
+
+        if (win == false)
         {
             loseScreen.SetActive(true);
             audioPlayer.clip = loseTrack;
             audioPlayer.Play();
+        }
+        else
+        {
+            winScreen.SetActive(true);
         }
     }
 

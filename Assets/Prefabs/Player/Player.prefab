@@ -167,5 +167,7 @@ MonoBehaviour:
   currentZone: {fileID: 0}
   BrokenBody: {fileID: 2732487954666353443, guid: cfbe7c512d5c6d742a0add06b1a2c962,
     type: 3}
+  playerSpawner: {fileID: 7440052586385366761, guid: a3b304971186a8b4a99e678e88638577,
+    type: 3}
   redMaterial: {fileID: 2100000, guid: 01f161f488c48bc4db74137f15abffa2, type: 2}
   blueMaterial: {fileID: 2100000, guid: c49fa18f1b3917845984af64886cf809, type: 2}
