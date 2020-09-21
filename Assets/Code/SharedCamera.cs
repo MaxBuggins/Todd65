@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pixelplacement;
+using System;
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,11 @@ public class SharedCamera : MonoBehaviour
     public static SharedCamera instance;
 
     [Header("Camera Chacrchteristics")]
+    public bool autoScroll = false;
+    public bool scrollVertical = false;
+    public float scrollDuration;
+    public AnimationCurve scrollCurve;
+
     public bool equalShare = true;
     public bool perspective = true;
     public bool vertical = false;
@@ -41,16 +47,27 @@ public class SharedCamera : MonoBehaviour
 
     [Header("Unity Things")]
     private Camera cam;
+    public Finish finish;
 
     private void Start()
     {
         instance = this;
         cam = GetComponent<Camera>();
+
+
+        if (autoScroll == true)
+        {
+            Tween.Position(transform, finish.transform.position, scrollDuration, 0.5f);
+        }
     }
 
     private void LateUpdate() //camera updates after everything has moved
     {
         if (targets.Count == 0) //no targets to follow
+            return;
+
+
+        if (autoScroll == true)
             return;
 
         defultPos = offset.x * Vector3.up - offset.y * transform.forward; //applys the offset to camera

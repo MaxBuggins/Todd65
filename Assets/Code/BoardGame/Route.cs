@@ -8,13 +8,13 @@ public class Route : MonoBehaviour
     public List<Transform> childNodeList = new List<Transform>();
 
     [System.Serializable]
-    public class RouteInsert
+    public class NextRoutes
     {
         public Route route;
         public int startPos;
         public MoveDirection moveDirection;
     }
-    public RouteInsert[] nextRoutes;
+    public NextRoutes[] nextRoutes;
 
 
     void OnDrawGizmos()

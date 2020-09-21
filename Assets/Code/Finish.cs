@@ -17,10 +17,10 @@ public class Finish : MonoBehaviour
         var player = other.GetComponent<Player>();
         if (player != null)
         {
-            if (player.p1 == true)
-                gameManager.p1Score += winPoints;
-            else
-                gameManager.p2Score += winPoints;
+            //if (player.p1 == true)
+            //    gameManager.p1Score += winPoints;
+            //else
+            //    gameManager.p2Score += winPoints;
 
             gameManager.GameOver(true);
             player.Dead(false);

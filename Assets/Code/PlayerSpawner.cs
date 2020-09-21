@@ -82,7 +82,7 @@ public class PlayerSpawner : MonoBehaviour
             return;
 
         var play = Instantiate(player, transform.position, player.transform.rotation);
-        play.GetComponent<Player>().p1 = p1;
+        //play.GetComponent<Player>().p1 = p1;
         controls.Disable();
         Destroy(gameObject);
     }

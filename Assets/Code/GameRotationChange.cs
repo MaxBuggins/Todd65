@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameRotationChange : MonoBehaviour
-{
+{/*
     [Header("!ONLY use Position Constraints!")]
     public Rotation playerPos; //ONLY use Position Constraints or it will proberly break
     public bool customLockPos = false;
     public float lockPos; //for locking the players to the same position relative to rotation
 
     public Quaternion camRot;
+
+    public bool fish = true;
 
     private SharedCamera sharedCam;
 
@@ -47,4 +49,5 @@ public class GameRotationChange : MonoBehaviour
 
         SharedCamera.instance.currentZone = this;
     }
+    */
 }

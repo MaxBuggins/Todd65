@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public enum Rotation { x, y, z } //stupid dumb
+public enum PlayerNum { m1, p1, p2, p3 } //stupid dumb
 
 public class Player : MonoBehaviour
 {
@@ -14,9 +14,8 @@ public class Player : MonoBehaviour
     private float time;
 
     [Header("Player State")]
-    public bool p1 = true; //determins if this instance is for player 1 or player 2
+    public PlayerNum playerNum;
     public bool dead = false;
-    public Rotation rotation;
 
     public bool sucked = false; //for when player is traveling through pipes and does not get effected by fixed position
     private Vector2 move; //2D Vector movement refrence
@@ -74,31 +73,37 @@ public class Player : MonoBehaviour
         jumpForce = playerType.jumpForce * rb.mass;
         gravityMultiplyer = playerType.gravityMultiplyer;
 
-        if (p1 == true) //checks if this script is for player1 if so takes player 1 inputs
+        switch (playerNum)
         {
-            render.material = redMaterial;
-            controls.Player1.Jump.performed += ctx => Jump();
-            controls.Player1.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
-            controls.Player1.Move.canceled += ctx => move = Vector2.zero;
+            case PlayerNum.m1:
+                {
+                    break;
+                }
+            case PlayerNum.p1:
+                {
+                    //render.material = redMaterial;
+                    controls.Player1.Jump.performed += ctx => Jump();
+                    controls.Player1.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
+                    controls.Player1.Move.canceled += ctx => move = Vector2.zero;
+                    break;
+                }
+            case PlayerNum.p2:
+                {
+                    //render.material = blueMaterial;
+                    controls.Player2.Jump.performed += ctx => Jump();
+                    controls.Player2.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
+                    controls.Player2.Move.canceled += ctx => move = Vector2.zero;
+                    break;
+                }
+            case PlayerNum.p3:
+                {
+                    //render.material = blueMaterial;
+                    controls.Player3.Jump.performed += ctx => Jump();
+                    controls.Player3.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
+                    controls.Player3.Move.canceled += ctx => move = Vector2.zero;
+                    break;
+                }
         }
-        else //else it must be player 2 and takes in player2's input
-        {
-            render.material = blueMaterial;
-            controls.Player2.Jump.performed += ctx => Jump();
-            controls.Player2.Move.performed += ctx => move = ctx.ReadValue<Vector2>();
-            controls.Player2.Move.canceled += ctx => move = Vector2.zero;
-        }
-
-        if (rotation == Rotation.x)
-        {
-            lockPos = transform.position.x;
-        }
-        if (rotation == Rotation.z)
-        {
-            lockPos = transform.position.z;
-        }
-
-        changeOritation(rotation, lockPos);
     }
 
     private void OnEnable()
@@ -206,29 +211,6 @@ public class Player : MonoBehaviour
         }
 
     }
-    public void changeOritation(Rotation rot, float lockPos) //this is kinda cut stuff but yeah
-    {
-        rotation = rot;
-        switch (rotation)
-        {
-            case (Rotation.x):
-                {
-                    rb.constraints = RigidbodyConstraints.FreezePositionX;
-                    transform.position = new Vector3(lockPos, transform.position.y, transform.position.z);
-                    break;
-                }
-            case (Rotation.z):
-                {
-                    rb.constraints = RigidbodyConstraints.FreezePositionZ;
-                    transform.position = new Vector3(transform.position.x, transform.position.y, lockPos);
-                    break;
-                }
-            case (Rotation.y): //bit diffrent as player is not constrained cause top down = cool up - gottem
-                {
-                    break;
-                }
-        }
-    }
 
     public void Dead(bool lose)
     {
@@ -239,19 +221,39 @@ public class Player : MonoBehaviour
         var players = FindObjectsOfType<Player>();
         var brokenBody = Instantiate(BrokenBody, transform.position, transform.rotation);
 
-        if (p1 == true) //so the broken body is the same colour
-            foreach (Renderer render in brokenBody.GetComponents<Renderer>())
-                render.material = redMaterial;
-        else
-            foreach (Renderer render in brokenBody.GetComponents<Renderer>())
-                render.material = blueMaterial;
+        //if (p1 == true) //so the broken body is the same colour
+        //    foreach (renderer render in brokenbody.getcomponents<renderer>())
+        //        render.material = redmaterial;
+        //else
+        //    foreach (renderer render in brokenbody.getcomponents<renderer>())
+        //        render.material = bluematerial;
 
         if (lose == true)
         {
-            if (p1 == true) //bad yes, i dont care right now maybe later
-                gameManager.p1Score -= 10;
-            else
-                gameManager.p2Score -= 10;
+            switch (playerNum)
+            {
+                case PlayerNum.m1:
+                    {
+                        gameManager.p1Score -= 10;
+                        break;
+                    }
+                case PlayerNum.p1:
+                    {
+                        gameManager.p2Score -= 10;
+                        break;
+                    }
+                case PlayerNum.p2:
+                    {
+                        gameManager.p2Score -= 10;
+                        break;
+                    }
+                case PlayerNum.p3:
+                    {
+                        gameManager.p2Score -= 10;
+                        break;
+                    }
+            }
+                    
 
             if (players.Length <= 1) //only player left
             {
@@ -262,26 +264,26 @@ public class Player : MonoBehaviour
             bool clone = false;
             foreach (Player player in players) //checks if its the only player left and if so it can respawn
             {
-                if (player != this) //doesn't check it self
-                    if (player.p1 == p1) //only checks those that are the same p1 value
-                    {
-                        clone = true;
-                        Destroy(gameObject); //if there is anthor player on the same 'team' then this is just a clone and then you can destory
-                    }
+                //if (player != this) //doesn't check it self
+                //    if (player.p1 == p1) //only checks those that are the same p1 value
+                //    {
+                //        clone = true;
+                //        Destroy(gameObject); //if there is anthor player on the same 'team' then this is just a clone and then you can destory
+                //    }
             }
-            if (clone == false)
-                Spawn();
+            //if (clone == false)
+                //Spawn();
         }
         else
             Destroy(gameObject);
     }
 
-    public void Spawn()
-    {
-        var spawner = Instantiate(playerSpawner);
-        spawner.GetComponent<PlayerSpawner>().p1 = p1;
-        Destroy(gameObject);
-    }
+    //public void Spawn()
+    //{
+    //    var spawner = Instantiate(playerSpawner);
+    //    spawner.GetComponent<PlayerSpawner>().p1 = p1;
+    //    Destroy(gameObject);
+    //}
 
     public void Pause(bool paused)
     {

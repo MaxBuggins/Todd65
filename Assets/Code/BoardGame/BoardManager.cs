@@ -29,7 +29,7 @@ public class BoardManager : MonoBehaviour
         
     }
 
-    void NewTurn()
+    public void NewTurn()
     {
         playerTurn++;
         if (playerTurn > players.Length - 1)
@@ -38,30 +38,21 @@ public class BoardManager : MonoBehaviour
             playerTurn = 0;
         }
 
-        mainUI.NewTurn(true);
+        mainUI.NewTurn(true, players[playerTurn]);
         mainCam.target = players[playerTurn].transform;
-
-    }
-
-    public void ChoseRoute(MoveDirection moveDirection)
-    {
-        Route newRoute = players[playerTurn].currentRoute;
-        foreach (Route.RouteInsert route in players[playerTurn].currentRoute.nextRoutes)
-            if (route.moveDirection == moveDirection)
-                players[playerTurn].Move(route.route, route.startPos);
+        players[playerTurn].playerState = PlayState.Turn;
     }
 
     public void Roll()
     {
-        var roll = Random.Range(1, 6);
-
-        if (players[playerTurn].currentRoute.childPieces.Length <= players[playerTurn].routePos)
-        {
-            mainUI.ChooseDirection();
-            return;
-        }
-        players[playerTurn].Move(players[playerTurn].currentRoute, roll + players[playerTurn].routePos);
-        NewTurn();
+        players[playerTurn].Roll();
+    }
+    public void ChooseRoute(bool left)
+    {
+        if(left == true)
+            players[playerTurn].ChangeRoute(MoveDirection.left);
+        else
+            players[playerTurn].ChangeRoute(MoveDirection.right);
     }
 
     public void StartMiniGame()

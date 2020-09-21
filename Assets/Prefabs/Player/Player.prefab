@@ -154,9 +154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8ef0929aa85f434ea031d0e8b453846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  p1: 1
+  playerNum: 1
   dead: 0
-  rotation: 2
   sucked: 0
   playerType: {fileID: 11400000, guid: ffc22aa51247ce34b9add6726005bef0, type: 2}
   moveForce: 0

@@ -42,6 +42,33 @@ public class @MainControls : IInputActionCollection, IDisposable
             ]
         },
         {
+            ""name"": ""Mouse1"",
+            ""id"": ""7120e9ce-ef89-4874-a710-9015ed1560a4"",
+            ""actions"": [
+                {
+                    ""name"": ""MouseMovement"",
+                    ""type"": ""Value"",
+                    ""id"": ""f62f6f24-6389-4f90-b4f2-0e5e30da2d57"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a9483186-a1d8-4c37-ad36-750e3795291a"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Player1"",
             ""id"": ""462e8f27-5d40-4133-b0aa-b2717a65ce42"",
             ""actions"": [
@@ -211,6 +238,96 @@ public class @MainControls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""62188d6c-d846-40c7-a54b-dcf783ded864"",
+                    ""path"": ""<Keyboard>/rightCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Player3"",
+            ""id"": ""a04059a9-6fcc-4032-8bed-0c7286c39caa"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Button"",
+                    ""id"": ""26e0d304-0cec-450c-84e7-1e8890f87709"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""2de4337d-3cc9-4937-8167-109473a863fd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""30659751-d8e5-4982-80c7-c2338af883eb"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""586c0aaf-2503-4695-b98e-5398900ae9d7"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""902a5b03-48db-4c09-bd4f-077fed87a140"",
+                    ""path"": ""<Keyboard>/k"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""19b0f2c9-f934-4931-9dbb-b90e0b44ef31"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""4cd1480d-93b2-45db-b656-2392929a7f27"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9f5d6df8-5b78-48ac-bd6d-90c434aa936e"",
                     ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -227,6 +344,9 @@ public class @MainControls : IInputActionCollection, IDisposable
         // Shared
         m_Shared = asset.FindActionMap("Shared", throwIfNotFound: true);
         m_Shared_Pause = m_Shared.FindAction("Pause", throwIfNotFound: true);
+        // Mouse1
+        m_Mouse1 = asset.FindActionMap("Mouse1", throwIfNotFound: true);
+        m_Mouse1_MouseMovement = m_Mouse1.FindAction("MouseMovement", throwIfNotFound: true);
         // Player1
         m_Player1 = asset.FindActionMap("Player1", throwIfNotFound: true);
         m_Player1_Move = m_Player1.FindAction("Move", throwIfNotFound: true);
@@ -235,6 +355,10 @@ public class @MainControls : IInputActionCollection, IDisposable
         m_Player2 = asset.FindActionMap("Player2", throwIfNotFound: true);
         m_Player2_Move = m_Player2.FindAction("Move", throwIfNotFound: true);
         m_Player2_Jump = m_Player2.FindAction("Jump", throwIfNotFound: true);
+        // Player3
+        m_Player3 = asset.FindActionMap("Player3", throwIfNotFound: true);
+        m_Player3_Move = m_Player3.FindAction("Move", throwIfNotFound: true);
+        m_Player3_Jump = m_Player3.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -313,6 +437,39 @@ public class @MainControls : IInputActionCollection, IDisposable
         }
     }
     public SharedActions @Shared => new SharedActions(this);
+
+    // Mouse1
+    private readonly InputActionMap m_Mouse1;
+    private IMouse1Actions m_Mouse1ActionsCallbackInterface;
+    private readonly InputAction m_Mouse1_MouseMovement;
+    public struct Mouse1Actions
+    {
+        private @MainControls m_Wrapper;
+        public Mouse1Actions(@MainControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MouseMovement => m_Wrapper.m_Mouse1_MouseMovement;
+        public InputActionMap Get() { return m_Wrapper.m_Mouse1; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(Mouse1Actions set) { return set.Get(); }
+        public void SetCallbacks(IMouse1Actions instance)
+        {
+            if (m_Wrapper.m_Mouse1ActionsCallbackInterface != null)
+            {
+                @MouseMovement.started -= m_Wrapper.m_Mouse1ActionsCallbackInterface.OnMouseMovement;
+                @MouseMovement.performed -= m_Wrapper.m_Mouse1ActionsCallbackInterface.OnMouseMovement;
+                @MouseMovement.canceled -= m_Wrapper.m_Mouse1ActionsCallbackInterface.OnMouseMovement;
+            }
+            m_Wrapper.m_Mouse1ActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @MouseMovement.started += instance.OnMouseMovement;
+                @MouseMovement.performed += instance.OnMouseMovement;
+                @MouseMovement.canceled += instance.OnMouseMovement;
+            }
+        }
+    }
+    public Mouse1Actions @Mouse1 => new Mouse1Actions(this);
 
     // Player1
     private readonly InputActionMap m_Player1;
@@ -395,9 +552,54 @@ public class @MainControls : IInputActionCollection, IDisposable
         }
     }
     public Player2Actions @Player2 => new Player2Actions(this);
+
+    // Player3
+    private readonly InputActionMap m_Player3;
+    private IPlayer3Actions m_Player3ActionsCallbackInterface;
+    private readonly InputAction m_Player3_Move;
+    private readonly InputAction m_Player3_Jump;
+    public struct Player3Actions
+    {
+        private @MainControls m_Wrapper;
+        public Player3Actions(@MainControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Move => m_Wrapper.m_Player3_Move;
+        public InputAction @Jump => m_Wrapper.m_Player3_Jump;
+        public InputActionMap Get() { return m_Wrapper.m_Player3; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(Player3Actions set) { return set.Get(); }
+        public void SetCallbacks(IPlayer3Actions instance)
+        {
+            if (m_Wrapper.m_Player3ActionsCallbackInterface != null)
+            {
+                @Move.started -= m_Wrapper.m_Player3ActionsCallbackInterface.OnMove;
+                @Move.performed -= m_Wrapper.m_Player3ActionsCallbackInterface.OnMove;
+                @Move.canceled -= m_Wrapper.m_Player3ActionsCallbackInterface.OnMove;
+                @Jump.started -= m_Wrapper.m_Player3ActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_Player3ActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_Player3ActionsCallbackInterface.OnJump;
+            }
+            m_Wrapper.m_Player3ActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
+            }
+        }
+    }
+    public Player3Actions @Player3 => new Player3Actions(this);
     public interface ISharedActions
     {
         void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IMouse1Actions
+    {
+        void OnMouseMovement(InputAction.CallbackContext context);
     }
     public interface IPlayer1Actions
     {
@@ -405,6 +607,11 @@ public class @MainControls : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
     }
     public interface IPlayer2Actions
+    {
+        void OnMove(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
+    }
+    public interface IPlayer3Actions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);

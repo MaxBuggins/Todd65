@@ -63,13 +63,11 @@ public class Item : MonoBehaviour
 
         if (other.tag == "Player")
         {
-            bool targetP1;
-            if (opisitePickUp == false) //if the touching player gets effected
-                targetP1 = other.GetComponent<Player>().p1;
-            else
-                targetP1 = !other.GetComponent<Player>().p1;
+            PlayerNum playerNum;
 
-            if (targetP1 == true) //bad yes, i dont care right now maybe later
+            playerNum = other.GetComponent<Player>().playerNum;
+
+            if (playerNum == PlayerNum.p1) //bad yes, i dont care right now maybe later
                 gameManager.p1Score += points;
             else
                 gameManager.p2Score += points;
@@ -85,11 +83,11 @@ public class Item : MonoBehaviour
                         var players = FindObjectsOfType<Player>();
                         foreach(Player player in players)
                         {
-                            if(player.p1 == targetP1)
-                            {
-                                player.moveForce *= 1.25f;
-                                player.jumpForce *= 1.25f;
-                            }
+                            //if(player.p1 == targetP1)
+                            //{
+                            //    player.moveForce *= 1.25f;
+                            //    player.jumpForce *= 1.25f;
+                            //}
                         }
                         break;
                     }
@@ -101,7 +99,7 @@ public class Item : MonoBehaviour
     }
 
     void RelativeMaterial() //changes the colour of the material to reflect which player is closest
-    {
+    {/*
         float closestMag = Mathf.Infinity; //need to start somewhere and infiity looks cool
         var players = FindObjectsOfType<Player>();
 
@@ -116,6 +114,6 @@ public class Item : MonoBehaviour
             render.material = gameManager.p1Material;
         else
             render.material = gameManager.p2Material;
-
+*/
     }
 }

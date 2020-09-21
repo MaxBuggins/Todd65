@@ -7,8 +7,7 @@ using Pixelplacement;
 
 public class UIBoardGame : MonoBehaviour
 {
-
-    [Header("Charchteristics")]
+    [Header("Charchteristics")] //adian plays dead souls and does chemstry
     public float playerTurnTextDelay;
 
     [Header("Internal Variables")]
@@ -19,8 +18,13 @@ public class UIBoardGame : MonoBehaviour
     private BoardManager boardManager;
 
     public GameObject playerTurn;
+
     public GameObject chooseDirection;
+    public GameObject[] chooseDirections;
+
     public TextMeshProUGUI[] playerScores;
+
+    public Button rollButton;
 
     void Start()
     {
@@ -40,16 +44,16 @@ public class UIBoardGame : MonoBehaviour
 
     void Update()
     {
-        time -= Time.deltaTime;
+        //time -= Time.deltaTime;
 
-        if (time < 0)
-        {
-            NewTurn(false);
-        }
+        //if (time < 0)
+        //{
+        //    NewTurn(false);
+        //}
 
     }
 
-    public void NewTurn(bool _new)
+    public void NewTurn(bool _new, BoardPlayer player)
     {
         if (_new == true)
         {
@@ -60,8 +64,12 @@ public class UIBoardGame : MonoBehaviour
             playerTurn.SetActive(false);
     }
 
-    public void ChooseDirection()
+    public void ChooseDirection(Route startRoute)
     {
         chooseDirection.SetActive(true);
+        foreach (GameObject arrow in chooseDirections)
+        {
+            //if(a)
+        }
     }
 }
