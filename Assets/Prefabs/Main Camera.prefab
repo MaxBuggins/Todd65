@@ -384,5 +384,5 @@ MonoBehaviour:
   zoomSpeed: 15
   zoomOffset: 0
   minZoom: 9
-  maxZoom: 20
+  maxZoom: 12
   currentZone: {fileID: 0}

@@ -46,6 +46,6 @@ public class UI_LevelChoice : MonoBehaviour
 
     public void LoadLevel()
     {
-        SceneManager.LoadScene(levelType.level.name);
+        SceneManager.LoadScene(levelType.level);
     }
 }

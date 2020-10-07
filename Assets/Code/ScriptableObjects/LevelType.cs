@@ -22,5 +22,5 @@ public class LevelType : ScriptableObject
 
     public Sprite levelPreview;
 
-    public Object level;
+    public string level;
 }

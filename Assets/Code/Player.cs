@@ -240,10 +240,10 @@ public class Player : MonoBehaviour
         var brokenBody = Instantiate(BrokenBody, transform.position, transform.rotation);
 
         if (p1 == true) //so the broken body is the same colour
-            foreach (Renderer render in brokenBody.GetComponents<Renderer>())
+            foreach (Renderer render in brokenBody.GetComponentsInChildren<Renderer>())
                 render.material = redMaterial;
         else
-            foreach (Renderer render in brokenBody.GetComponents<Renderer>())
+            foreach (Renderer render in brokenBody.GetComponentsInChildren<Renderer>())
                 render.material = blueMaterial;
 
         if (lose == true)

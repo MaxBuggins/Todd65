@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelName: Beginners Bounce
   difficilty: 1
+  teamType: 0
+  controlType: 0
+  levelDiscription: 
   levelPreview: {fileID: 21300000, guid: 2db370e4e7812a04f8af96ea043d59a4, type: 3}
-  level: {fileID: 102900000, guid: 094cf6608b1427a44b878eb64de9c752, type: 3}
+  level: Biginners Bounce

@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelName: Industrial
   difficilty: 0
+  teamType: 0
+  controlType: 0
+  levelDiscription: 
   levelPreview: {fileID: 21300000, guid: 273705febe322a24797298a3bad2b1ea, type: 3}
-  level: {fileID: 102900000, guid: 98996565a08059146ba8ac693766544b, type: 3}
+  level: IndustralIndustry
