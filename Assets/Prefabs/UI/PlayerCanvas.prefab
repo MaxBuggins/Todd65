@@ -507,6 +507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paused: 0
+  gameOver: 0
   p1Score: 0
   p2Score: 0
   p1Material: {fileID: 2100000, guid: 01f161f488c48bc4db74137f15abffa2, type: 2}
@@ -517,6 +518,7 @@ MonoBehaviour:
   pauseScreen: {fileID: 9003715393444009600}
   loseScreen: {fileID: 2097474542012335621}
   winScreen: {fileID: 1144108919230623638}
+  winnerText: {fileID: 6578902870354925230}
   loseTrack: {fileID: 8300000, guid: 4944fbbd47febfc4bb7205204eb051a2, type: 3}
 --- !u!1 &1202324532830762195
 GameObject:

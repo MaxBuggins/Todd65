@@ -26,7 +26,8 @@ public class GameManager : MonoBehaviour
     public GameObject pauseScreen;
     public GameObject loseScreen;
     public GameObject winScreen;
-    
+    public TextMeshProUGUI winnerText;
+
     private MainControls controls; //refrence to Unitys input system
 
     [Header("AudioClips")]
@@ -96,6 +97,21 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            if (p1Score > p2Score)
+            {
+                winnerText.text = "Red Win";
+                winnerText.color = Color.red;
+            }
+            else if (p1Score < p2Score)
+            {
+                winnerText.text = "Blue Win";
+                winnerText.color = Color.blue;
+            }
+            else
+            {
+                winnerText.text = "StaleMate";
+                winnerText.color = Color.grey;
+            }
             winScreen.SetActive(true);
         }
     }
