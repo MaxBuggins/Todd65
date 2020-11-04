@@ -35,6 +35,8 @@ public class Item : MonoBehaviour
     }
     void Update()
     {
+        if (moveAmount == 0)
+            return;
         movePos = orginPos;
         movePos.y += Mathf.Sin(Time.deltaTime * Mathf.PI * moveSpeed) * moveAmount;
 

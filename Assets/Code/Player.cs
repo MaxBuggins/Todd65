@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
 
     public GameRotationChange currentZone;
 
+    public float lastBounceTimeStamp;
+
     [Header("Unity Things")]
     public GameObject BrokenBody;
     public GameObject playerSpawner;

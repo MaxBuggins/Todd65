@@ -10,6 +10,8 @@ public class PipePiece : MonoBehaviour
     public Transform nextPipe;
     private Vector3 nextPipePos;
 
+    public bool isEnd;
+
     public List<Rigidbody> rbs; //list of all rigidbodys now being sucked through pipe
 
     private void Start()
@@ -70,6 +72,10 @@ public class PipePiece : MonoBehaviour
 
         var player = other.GetComponent<Player>(); //makes the player no longer suck
         if (player != null)
+        {
             player.sucked = false;
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, 1);
+            player.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionZ;
+        }
     }
 }

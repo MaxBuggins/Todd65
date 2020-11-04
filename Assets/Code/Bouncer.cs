@@ -24,8 +24,11 @@ public class Bouncer : MonoBehaviour
 
             Player player = collision.gameObject.GetComponent<Player>();
             if (player != null)
-                rb.AddForce(transform.forward * bounceForce * player.gravityMultiplyer, ForceMode.VelocityChange);
-
+            {
+                if (player.lastBounceTimeStamp < Time.time - 0.1f)
+                    rb.AddForce(transform.forward * bounceForce * player.gravityMultiplyer, ForceMode.VelocityChange);
+                player.lastBounceTimeStamp = Time.time;
+            }
             else
                 rb.AddForce(transform.forward * bounceForce, ForceMode.VelocityChange);
         }
